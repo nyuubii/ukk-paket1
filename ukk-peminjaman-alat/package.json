@@ -1,12 +1,17 @@
 {
   "name": "ukk-peminjaman-alat",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/app.ts",
   "directories": {
     "doc": "docs"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon --exec ts-node ./src/app.ts",
+    "build": "tsc",
+    "start": "node dist/app.js",
+    "lint": "tsc --noEmit",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "sequelize": "sequelize-cli"
   },
   "keywords": [],
   "author": "",

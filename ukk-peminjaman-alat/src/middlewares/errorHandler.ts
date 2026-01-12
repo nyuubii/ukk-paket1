@@ -1,19 +1,28 @@
 import { Request, Response, NextFunction } from 'express';
 
+interface CustomError extends Error {
+  statusCode?: number;
+}
+
 export const errorHandler = (
-  err: any,
-  req: Request,
+  err: CustomError,
+  _req: Request,   // ✅ pakai underscore
   res: Response,
-  next: NextFunction
+  _next: NextFunction // ✅ pakai underscore
 ): void => {
   console.error('Error:', err);
 
-  const statusCode = err.statusCode || 500;
+  const statusCode = err.statusCode ?? 500;
   const message = err.message || 'Internal Server Error';
 
-  res.status(statusCode).json({
+  const response: any = {
     success: false,
     message,
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
-  });
+  };
+
+  if (process.env.NODE_ENV === 'development') {
+    response.stack = err.stack;
+  }
+
+  res.status(statusCode).json(response);
 };

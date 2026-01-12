@@ -63,7 +63,8 @@ Alat.init(
       allowNull: true,
     },
     kondisi: {
-      type: DataTypes.ENUM('baik', 'rusak ringan', 'rusak berat'),
+      type: DataTypes.STRING,
+      allowNull: false,
       defaultValue: 'baik',
     },
     jumlah_total: {
