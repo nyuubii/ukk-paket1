@@ -1,170 +1,85 @@
-# Aplikasi Peminjaman Alat - Backend API
+============================================================
+       # GEARFLOW API - SISTEM PEMINJAMAN ALAT #
+        Backend Service UKK RPL 2025/2026
+============================================================
 
-Backend untuk UKK RPL 2025/2026 - Sistem Peminjaman Alat dengan 3 level user.
+DESKRIPSI PROYEK
+----------------
+GearFlow adalah solusi RESTful API yang dirancang untuk mendigitalisasi 
+prosedur peminjaman sarana dan prasarana. Fokus utama proyek ini adalah 
+pada keamanan data, integritas relasi, dan kemudahan manajemen inventaris.
 
-## 🎯 Fitur Utama
+FITUR UTAMA BERDASARKAN ROLE
+----------------------------
 
-### Admin
-- CRUD User
-- CRUD Alat
-- CRUD Kategori
-- CRUD Data Peminjaman
-- CRUD Pengembalian
-- View Log Aktivitas
-- Cetak Laporan (PDF/Excel)
+1. ADMINISTRATOR (Full Control)
+   - Otomasi Inventaris: CRUD User, Alat, dan Kategori.
+   - Audit Trail: Memantau seluruh jejak aktivitas melalui Log Aktivitas.
+   - Reporting: Generasi laporan (PDF & Excel).
+   - Data Oversight: Monitoring seluruh transaksi secara real-time.
 
-### Petugas
-- Menyetujui/Menolak Peminjaman
-- Memantau Pengembalian
-- View Log Aktivitas
+2. PETUGAS (Verification & Monitoring)
+   - Approval Workflow: Validasi (Setujui/Tolak) pengajuan peminjaman.
+   - Return Oversight: Memantau proses pengembalian alat.
+   - Security Logs: Mengawasi aktivitas harian sistem.
 
-### Peminjam
-- Lihat Daftar Alat
-- Ajukan Peminjaman
-- Kembalikan Alat
+3. PEMINJAM (Self-Service)
+   - Katalog Alat: Eksplorasi daftar alat berdasarkan kategori.
+   - Request System: Pengajuan peminjaman alat secara mandiri.
+   - Return Process: Melakukan konfirmasi pengembalian alat.
 
-## 🛠️ Teknologi
+TEKNOLOGI YANG DIGUNAKAN
+------------------------
+- Core Runtime: Node.js (TypeScript)
+- Framework   : Express.js
+- Database    : PostgreSQL
+- ORM         : Sequelize
+- Security    : JWT, Bcrypt, Helmet.js
+- Validation  : Joi
+- Reporting   : jsPDF & ExcelJS
 
-- Node.js + Express
-- TypeScript
-- PostgreSQL
-- Sequelize ORM
-- JWT Authentication
-- Bcrypt
-- Joi Validation
-- jsPDF & ExcelJS
+PANDUAN INSTALASI
+-----------------
+1. Clone repositori & Install dependencies:
+   > npm install
 
-## 📦 Instalasi
+2. Setup Database (pgAdmin):
+   - Buat database: peminjaman_alat_db
+   - Jalankan query dari file database/schema.sql (Tekan F5)
 
-1. Clone repository
-```bash
-git clone 
-cd ukk-peminjaman-alat
-```
+3. Konfigurasi Environment:
+   Buat file .env dan sesuaikan:
+   DB_HOST=localhost
+   DB_PORT=5432
+   DB_NAME=peminjaman_alat_db
+   DB_USER=postgres
+   DB_PASSWORD=password_anda
 
-2. Install dependencies
-```bash
-npm install
-```
+4. Jalankan Server:
+   - Development: npm run dev
+   - Production : npm run build && npm start
 
-3. Setup database dengan pgAdmin
-```
-a. Buka pgAdmin
-b. Klik kanan pada "Databases" → Create → Database
-c. Nama database: peminjaman_alat_db
-d. Klik Save
+KREDENSIAL DEFAULT (UJIB COBA)
+------------------------------
+- Admin   : admin / admin123
+- Petugas : petugas1 / petugas123
+- Peminjam: peminjam1 / peminjam123
 
-e. Klik kanan pada database "peminjaman_alat_db" → Query Tool
-f. Buka file database/schema.sql
-g. Copy semua isi file, paste ke Query Tool
-h. Klik Execute/Run (F5) untuk menjalankan semua query
-i. Database siap digunakan!
-```
+RINGKASAN API ENDPOINTS
+-----------------------
+- POST /api/auth/login             : Autentikasi
+- GET  /api/alat                   : Daftar Alat
+- POST /api/peminjaman             : Pengajuan Pinjam
+- PUT  /api/peminjaman/:id/approve : Validasi Petugas
+- GET  /api/laporan/peminjaman/pdf : Cetak Laporan
 
-4. Konfigurasi environment
-```bash
-cp .env.example .env
-# Edit .env sesuai konfigurasi pgAdmin Anda:
-# DB_HOST=localhost
-# DB_PORT=5432
-# DB_NAME=peminjaman_alat_db
-# DB_USER=postgres (atau username pgAdmin Anda)
-# DB_PASSWORD=your_pgadmin_password
-```
+STANDAR KEAMANAN
+----------------
+1. Password Hashing (Bcrypt)
+2. Stateless Authentication (JWT)
+3. Input Sanitization (Joi Validation)
+4. XSS & Sniffing Protection (Helmet.js)
 
-5. Jalankan aplikasi
-```bash
-# Development
-npm run dev
-
-# Production
-npm run build
-npm start
-```
-
-## 🔐 Default Users
-
-| Username | Password | Role |
-|----------|----------|------|
-| admin | admin123 | admin |
-| petugas1 | petugas123 | petugas |
-| peminjam1 | peminjam123 | peminjam |
-
-## 📡 API Endpoints
-
-### Authentication
-- POST `/api/auth/login` - Login
-- POST `/api/auth/logout` - Logout
-- GET `/api/auth/me` - Get current user
-
-### Users (Admin only)
-- GET `/api/users` - Get all users
-- GET `/api/users/:id` - Get user by ID
-- POST `/api/users` - Create user
-- PUT `/api/users/:id` - Update user
-- DELETE `/api/users/:id` - Delete user
-
-### Alat (Admin only for CUD, All for R)
-- GET `/api/alat` - Get all alat
-- GET `/api/alat/:id` - Get alat by ID
-- POST `/api/alat` - Create alat
-- PUT `/api/alat/:id` - Update alat
-- DELETE `/api/alat/:id` - Delete alat
-
-### Kategori (Admin only for CUD, All for R)
-- GET `/api/kategori` - Get all kategori
-- POST `/api/kategori` - Create kategori
-- PUT `/api/kategori/:id` - Update kategori
-- DELETE `/api/kategori/:id` - Delete kategori
-
-### Peminjaman
-- GET `/api/peminjaman` - Get all peminjaman
-- GET `/api/peminjaman/:id` - Get peminjaman by ID
-- POST `/api/peminjaman` - Ajukan peminjaman (Peminjam)
-- PUT `/api/peminjaman/:id/approve` - Setujui peminjaman (Petugas)
-- PUT `/api/peminjaman/:id/reject` - Tolak peminjaman (Petugas)
-
-### Pengembalian
-- POST `/api/pengembalian` - Kembalikan alat
-- GET `/api/pengembalian` - Get all pengembalian
-- GET `/api/pengembalian/:id` - Get pengembalian by ID
-
-### Log Aktivitas (Admin only)
-- GET `/api/log` - Get all logs
-
-### Laporan (Admin only)
-- GET `/api/laporan/peminjaman/pdf` - Download laporan PDF
-- GET `/api/laporan/peminjaman/excel` - Download laporan Excel
-
-## 🧪 Testing
-
-Test cases tersedia di `tests/test-cases.md`
-
-## 📊 ERD
-
-ERD diagram tersedia di `docs/ERD.png`
-
-## 📖 Dokumentasi
-
-- Flowchart: `docs/FLOWCHART.md`
-- API Documentation: `docs/API_DOCUMENTATION.md`
-
-## 🔒 Security Features
-
-- JWT Authentication
-- Password hashing dengan bcrypt
-- Role-based access control
-- Input validation dengan Joi
-- Rate limiting
-- Helmet.js untuk security headers
-
-## ⚡ Performance Optimization
-
-- Database indexing
-- Query optimization dengan limit
-- Efficient data fetching
-- Connection pooling
-
-## 📝 License
-
-ISC
+------------------------------------------------------------
+Copyright (c) 2025 - GearFlow Team
+License: ISC
