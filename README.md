@@ -44,14 +44,14 @@ PANDUAN INSTALASI
    > npm install
 
 2. Setup Database (pgAdmin):
-   - Buat database: peminjaman_alat_db
+   - Buat database: peminjaman_alat_sekolah
    - Jalankan query dari file database/schema.sql (Tekan F5)
 
 3. Konfigurasi Environment:
    Buat file .env dan sesuaikan:
    DB_HOST=localhost
    DB_PORT=5432
-   DB_NAME=peminjaman_alat_db
+   DB_NAME=peminjaman_alat_sekolah
    DB_USER=postgres
    DB_PASSWORD=password_anda
 
