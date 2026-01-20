@@ -7,9 +7,14 @@ import { LogService } from '../services/logService';
 export class AuthController {
   static async login(req: Request, res: Response): Promise<void> {
     try {
-      const { username, password } = req.body;
+      const { username, email, password } = req.body;
 
-      const user = await User.findOne({ where: { username } });
+      // Build a safe where clause: prefer username, otherwise use email
+      const whereClause: any = {};
+      if (username) whereClause.username = username;
+      else if (email) whereClause.email = email;
+
+      const user = await User.findOne({ where: whereClause });
       
       if (!user || !user.is_active) {
         res.status(401).json({ message: 'Username atau password salah' });
@@ -87,7 +92,23 @@ export class AuthController {
         attributes: { exclude: ['password'] },
       });
 
-      res.json({ success: true, data: user });
+      if (!user) {
+        res.status(404).json({ success: false, message: 'User tidak ditemukan' });
+        return;
+      }
+
+      // Response format compatible with frontend: {id, username, role}
+      res.json({
+        success: true,
+        data: {
+          id: user.id,
+          username: user.username,
+          email: user.email,
+          nama_lengkap: user.nama_lengkap,
+          role: user.role,
+          is_active: user.is_active,
+        },
+      });
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }

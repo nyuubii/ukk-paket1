@@ -43,6 +43,11 @@ app.use('/api/pengembalian', pengembalianRoutes);
 app.use('/api/log', logRoutes);
 app.use('/api/laporan', laporanRoutes);
 
+// Alias routes for frontend compatibility
+// POST /api/login -> same as POST /api/auth/login
+// GET /api/user -> same as GET /api/auth/user
+app.use('/api', authRoutes);
+
 // Health check
 app.get('/health', (_req: Request, res: Response) => {
   res.status(200).json({ status: 'OK', message: 'Server is running' });
